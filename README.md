@@ -31,3 +31,20 @@ export OTEL_LOGS_EXPORTER=otlp
 Restart your app.
 
 Open http://{host}:3000/ 
+
+## Architecture
+```
+                                                             http/4317  ┌──────────────────┐   http/3200
+                                                           ┌----------> | Tempo [ traces ] |<-------------┐
+                                                           |            └──────────────────┘              |
+┌─────────────────────┐             ┌────────────────┐     | http/3100  ┌────────────────┐ http/3100 ┌─────────┐           
+| JAVA app + OT agent | ----------->| Otel Collector | ----└----------> | Loki [ logs ]  |<----------| Grafana |
+└─────────────────────┘  http/4318  └───────┬────────┘                  └────────────────┘           └─────────┘ 
+                                            ^     pull http/8090        ┌───────────────────────┐        |
+                                            └-------------------------- | Prometheus [ metrics] |<-------┘
+                                                                        └───────────────────────┘ http/9090
+```
+Data is stored permanently in local directories grafana-data loki-data prometheus-data tempo-data
+
+
+ 
