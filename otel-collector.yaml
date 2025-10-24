@@ -1,0 +1,35 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+exporters:
+  otlp:
+    endpoint: tempo:4317
+    tls:
+      insecure: true
+
+  file/logs:
+    path: /tmp/otel-logs.json
+
+  prometheus:
+    endpoint: "0.0.0.0:8090"
+
+  debug: 
+    verbosity: detailed
+
+  otlphttp:
+    endpoint: http://loki:3100/otlp
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [otlp]
+    metrics:
+      receivers: [otlp]
+      exporters: [debug,prometheus]
+    logs:
+      receivers: [otlp]
+      exporters: [otlphttp]
+
