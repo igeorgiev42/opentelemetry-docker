@@ -5,7 +5,7 @@ otel collector, loki, grafana, prometheus, tempo
 Clone repo
 ```
 mkdir grafana-data loki-data prometheus-data tempo-data
-chmod 777 mkdir grafana-data loki-data prometheus-data tempo-data
+chmod 777 grafana-data loki-data prometheus-data tempo-data
 docker-compose up -d
 ```
 
